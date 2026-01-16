@@ -3,13 +3,14 @@ package Account;
 import Client.Client;
 
 public class Account {
+    static int nexId = 1;
     private int idCompt;
     private int numeroCompte;
     private float solde;
     private Client client;
 
-    public Account(int idCompt, int numeroCompte, float solde, Client client){
-        this.idCompt = idCompt;
+    public Account(int numeroCompte, float solde, Client client){
+        this.idCompt = nexId++;
         this.numeroCompte = numeroCompte;
         this.solde = solde;
         this.client = client;

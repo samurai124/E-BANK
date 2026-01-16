@@ -2,17 +2,17 @@ package Client;
 
 import Account.Account;
 import Person.Person;
-
 import java.util.ArrayList;
 
 public class Client extends Person {
+    static int nextId = 1;
     private int idClient;
-    private String numeroClient;
+    private int numeroClient;
     private ArrayList<Account> accounts = new ArrayList<>();
 
-    public Client(String nom, String prenom, int age,String email,int idClient,String numeroClient){
+    public Client(String nom, String prenom, int age,String email,int numeroClient){
         super(nom, prenom, age, email);
-        this.idClient = idClient;
+        this.idClient = nextId++;
         this.numeroClient = numeroClient;
     }
 
@@ -24,11 +24,15 @@ public class Client extends Person {
         this.idClient = idClient;
     }
 
-    public String getNumeroClient() {
+    public int getNumeroClient() {
         return numeroClient;
     }
 
-    public void setNumeroClient(String numeroClient) {
+    public void setNumeroClient(int numeroClient) {
         this.numeroClient = numeroClient;
+    }
+
+    public void ajouterCompte(Account account){
+        accounts.add(account);
     }
 }
