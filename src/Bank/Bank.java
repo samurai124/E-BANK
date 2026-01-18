@@ -13,7 +13,7 @@ public class Bank {
 
     // function pour affiche  les clients
     public void afficherClients(){
-        System.out.println("____________________________\n_______List des client_______\n____________________________");
+        System.out.println("_______________________________________________________________________\n____________________________List des client____________________________\n_______________________________________________________________________");
         for(Client c:clients){
             System.out.printf("Numero Client : %d | Nom : %s | Prenom : %s \n",c.getNumeroClient(),c.getNom(),c.getPrenom());
             for (Account a : c.getAccounts()){
@@ -23,7 +23,7 @@ public class Bank {
     }
     // function pour affiche les comptes
     public void afficherComptes(){
-        System.out.println("____________________________\n_______List des Compte_______\n____________________________");
+        System.out.println("_______________________________________________________________________\n____________________________List des Compte____________________________\n_______________________________________________________________________");
         for (Account a:accounts){
             System.out.printf("Numero compte : %d | Solde : %.2f | Proprietaire : %s %s\n",a.getNumeroCompte(),a.getSolde(),a.getClient().getNom(),a.getClient().getPrenom());
         }
@@ -34,7 +34,7 @@ public class Bank {
         Random r = new Random();
         String nom, prenom, email;
         int age, numeroClient;
-        System.out.println("____________________________\n_______Ajouter client_______\n____________________________");
+        System.out.println("______________________________________________________________________\n____________________________Ajouter client____________________________\n______________________________________________________________________");
         // Récupérer le nom
         do {
             System.out.print("Entrez votre nom : ");
@@ -118,10 +118,10 @@ public class Bank {
         float solde = 0;
         Client client;
         String answer;
-        System.out.println("____________________________\n________Creer compte________\n____________________________");
+        System.out.println("_______________________________________________________________________\n_____________________________Creer compte_____________________________\n_______________________________________________________________________");
 
         do {
-            System.out.println("est-ce un compte d’épargne ? (oui/non)");
+            System.out.print("est-ce un compte d’épargne ? (oui/non) : ");
             answer = input.nextLine();
             if (answer.equals("oui")) {
                 isSavingAccount = true;
@@ -211,7 +211,7 @@ public class Bank {
             c.ajouterCompte(s);
             accounts.add(s);
             System.out.printf(
-                    "Compt  d’épargne  ajouté avec succès. Numéro compt : %d%n",
+                    "Compt  d’épargne  ajouté avec succès. Numéro compt : %d%n\n",
                     s.getNumeroCompte()
             );
 
@@ -229,7 +229,11 @@ public class Bank {
 
     // supprimer client
     public void supprimerClient() {
-        System.out.println("____________________________\n________Supprimer  client________\n____________________________");
+        System.out.println("_______________________________________________________________________\n____________________________Supprimer  client____________________________\n_______________________________________________________________________");
+        if (clients.isEmpty()){
+            System.out.println("aucun client existe !!!");
+            return;
+        }
 
         System.out.println("Veuillez choisir le numero Client :");
         for (int i = 0; i < clients.size(); i++) {
@@ -279,9 +283,13 @@ public class Bank {
     // supprimer un compte
     public void supprimerCompte() {
         int numCompt = 0;
-        System.out.println("____________________________\n______Supprimer compte______\n____________________________");
+        System.out.println("\n_______________________________________________________________________\n____________________________Supprimer compte____________________________\n_______________________________________________________________________");
         for (Account a : accounts) {
             System.out.printf("Numero copmte : %d | solde : %.2f | client numero : %d", a.getNumeroCompte(), a.getSolde(), a.getClient().getNumeroClient());
+        }
+        if(accounts.isEmpty()){
+            System.out.println("auc'un compt existe !!!! ");
+            return;
         }
         System.out.print("\nEntrez le numero compt : ");
         do {
@@ -328,6 +336,15 @@ public class Bank {
                 System.out.println("Invalide choix !!!!");
             }
         }
+    }
+    // menu
+    public int menu(){
+        System.out.println("_______________________________________________________________________\n____________________________E-bank menu____________________________\n_______________________________________________________________________");
+        System.out.println("1 ==> Afficher les comptes\n2 ==> Ajouter un client\n3 ==> Créer un compte bancaire\n4 ==> Consulter le solde\n5 ==> Déposer de l’argent\n6 ==> Retirer de l’argent\n7 ==> Supprimer un compte\n8 ==> Supprimer un client\n0 ==> quitter l'app");
+        int choix = input.nextInt();
+
+
+
     }
 }
 
