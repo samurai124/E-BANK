@@ -12,23 +12,31 @@ public class Bank {
     static Scanner input = new Scanner(System.in);
 
     // function pour affiche  les clients
-    public void afficherClients(){
+    public void afficherClients() {
         System.out.println("_______________________________________________________________________\n____________________________List des client____________________________\n_______________________________________________________________________");
-        for(Client c:clients){
-            System.out.printf("Numero Client : %d | Nom : %s | Prenom : %s \n",c.getNumeroClient(),c.getNom(),c.getPrenom());
-            for (Account a : c.getAccounts()){
-                System.out.printf("       Numero compte : %d \n",a.getNumeroCompte());
+        if (clients.isEmpty()){
+            System.out.println("aucun client exist !!!");
+        }
+        for (Client c : clients) {
+            System.out.printf("Numero Client : %d | Nom : %s | Prenom : %s \n", c.getNumeroClient(), c.getNom(), c.getPrenom());
+            for (Account a : c.getAccounts()) {
+                System.out.printf("       Numero compte : %d \n", a.getNumeroCompte());
             }
         }
     }
+
     // function pour affiche les comptes
-    public void afficherComptes(){
+    public void afficherComptes() {
         System.out.println("_______________________________________________________________________\n____________________________List des Compte____________________________\n_______________________________________________________________________");
-        for (Account a:accounts){
-            System.out.printf("Numero compte : %d | Solde : %.2f | Proprietaire : %s %s\n",a.getNumeroCompte(),a.getSolde(),a.getClient().getNom(),a.getClient().getPrenom());
+        if (accounts.isEmpty()){
+            System.out.println("aucun compte existe !!!");
+        }
+        for (Account a : accounts) {
+            System.out.printf("Numero compte : %d | Solde : %.2f | Proprietaire : %s %s\n", a.getNumeroCompte(), a.getSolde(), a.getClient().getNom(), a.getClient().getPrenom());
         }
 
     }
+
     // function pour ajouter un client
     public void ajouterClient() {
         Random r = new Random();
@@ -167,7 +175,7 @@ public class Bank {
         // client
         System.out.println("Veuillez choisir le numero Client :");
         for (int i = 0; i < clients.size(); i++) {
-            System.out.printf("Numero client : %d ,Nom et prenom: %s %s ", clients.get(i).getNumeroClient(), clients.get(i).getNom(), clients.get(i).getPrenom());
+            System.out.printf("Numero client : %d ,Nom et prenom: %s %s \n", clients.get(i).getNumeroClient(), clients.get(i).getNom(), clients.get(i).getPrenom());
         }
         int numeroClient = 0;
         do {
@@ -230,14 +238,14 @@ public class Bank {
     // supprimer client
     public void supprimerClient() {
         System.out.println("_______________________________________________________________________\n____________________________Supprimer  client____________________________\n_______________________________________________________________________");
-        if (clients.isEmpty()){
+        if (clients.isEmpty()) {
             System.out.println("aucun client existe !!!");
             return;
         }
 
         System.out.println("Veuillez choisir le numero Client :");
         for (int i = 0; i < clients.size(); i++) {
-            System.out.printf("Numero client : %d ,Nom et prenom: %s %s ", clients.get(i).getNumeroClient(), clients.get(i).getNom(), clients.get(i).getPrenom());
+            System.out.printf("Numero client : %d ,Nom et prenom: %s %s \n", clients.get(i).getNumeroClient(), clients.get(i).getNom(), clients.get(i).getPrenom());
         }
         int numeroClient = 0;
         String numeroClientstring;
@@ -273,7 +281,7 @@ public class Bank {
             clients.remove(c);
             for (int i = 0; i < accounts.size(); i++) {
                 if (accounts.get(i).getClient().getNumeroClient() == numeroClient) {
-                    System.out.printf("\nle Compte avec numero : %d est supprimer avec succes", accounts.get(i).getNumeroCompte());
+                    System.out.printf("\nle Compte avec numero : %d est supprimer avec succes\n", accounts.get(i).getNumeroCompte());
                     accounts.remove(i);
                 }
             }
@@ -285,9 +293,9 @@ public class Bank {
         int numCompt = 0;
         System.out.println("\n_______________________________________________________________________\n____________________________Supprimer compte____________________________\n_______________________________________________________________________");
         for (Account a : accounts) {
-            System.out.printf("Numero copmte : %d | solde : %.2f | client numero : %d", a.getNumeroCompte(), a.getSolde(), a.getClient().getNumeroClient());
+            System.out.printf("Numero copmte : %d | solde : %.2f | client numero : %d\n", a.getNumeroCompte(), a.getSolde(), a.getClient().getNumeroClient());
         }
-        if(accounts.isEmpty()){
+        if (accounts.isEmpty()) {
             System.out.println("auc'un compt existe !!!! ");
             return;
         }
@@ -327,24 +335,229 @@ public class Bank {
         if (client.getAccounts().isEmpty()) {
             System.out.printf("Le client %d n’a plus aucun compte. Voulez-vous le supprimer ?(oui/non)", client.getNumeroClient());
             String res = input.nextLine();
-            if (res.equals("non")){
+            if (res.equals("non")) {
                 System.out.println("ok");
             } else if (res.equals("oui")) {
                 clients.remove(client);
                 System.out.println("client est supprimer !");
-            }else{
+            } else {
                 System.out.println("Invalide choix !!!!");
             }
         }
     }
-    // menu
-    public int menu(){
-        System.out.println("_______________________________________________________________________\n____________________________E-bank menu____________________________\n_______________________________________________________________________");
-        System.out.println("1 ==> Afficher les comptes\n2 ==> Ajouter un client\n3 ==> Créer un compte bancaire\n4 ==> Consulter le solde\n5 ==> Déposer de l’argent\n6 ==> Retirer de l’argent\n7 ==> Supprimer un compte\n8 ==> Supprimer un client\n0 ==> quitter l'app");
-        int choix = input.nextInt();
-
-
-
+    // deposer function
+    public void deposerfunc(){
+        System.out.println("_______________________________________________________________________\n____________________________ Deposer ____________________________\n_______________________________________________________________________");
+        for (Account a : accounts) {
+            System.out.printf("Numero compte : %d | Solde : %.2f | Proprietaire : %s %s\n", a.getNumeroCompte(), a.getSolde(), a.getClient().getNom(), a.getClient().getPrenom());
+        }
+        int choice ;
+        do {
+            System.out.print("Entrez le numero du compte dans lequel tu veux déposer : ");
+            String choix = input.nextLine();
+            if (choix.isEmpty()) {
+                System.out.println("Veuillez entrer  un numero  !!! ");
+                choice = 0;
+            } else {
+                try {
+                    choice = Integer.parseInt(choix);
+                } catch (NumberFormatException e) {
+                    System.out.println("Veuillez entrer  un numero valide  !!! ");
+                    choice = 0;
+                }
+            }
+        }while (choice == 0);
+        Account c = null;
+        for (Account a : accounts){
+            if (a.getNumeroCompte() == choice){
+                c = a;
+            }
+        }
+        float montant;
+        if (c == null){
+            System.out.printf("Le compte avec le numero %d n'exsist pas !!",choice);
+        }else{
+            do {
+                System.out.print("Entrez le montant que vous souhaitez deposer : ");
+                String montantEntrer = input.nextLine();
+                if (montantEntrer.isEmpty()) {
+                    System.out.println("Veuillez entrer  un montant valide  !!! ");
+                    montant = 0;
+                } else {
+                    try {
+                        montant = Float.parseFloat(montantEntrer);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Veuillez entrer  un montant valide  !!! ");
+                        montant = 0;
+                    }
+                    if (montant < 0){
+                        System.out.println("Veuillez entrer  un montant valide  !!! ");
+                        montant = 0;
+                    }
+                }
+            }while (montant == 0);
+            c.deposer(montant);
+            System.out.println("Le depot a ete effectue avec succes ");
+        }
     }
+    // retirier function
+    public void retirerfunc(){
+        System.out.println("_______________________________________________________________________\n____________________________ Retirer ____________________________\n_______________________________________________________________________");
+
+        for (Account a : accounts) {
+            System.out.printf(
+                    "Numero compte : %d | Solde : %.2f | Proprietaire : %s %s\n",a.getNumeroCompte(),a.getSolde(),a.getClient().getNom(),a.getClient().getPrenom()
+            );
+        }
+
+        int choice;
+        do {
+            System.out.print("Entrez le numero du compte dans lequel tu veux retirer : ");
+            String choix = input.nextLine();
+
+            if (choix.isEmpty()) {
+                System.out.println("Veuillez entrer un numero valide !!!");
+                choice = 0;
+            } else {
+                try {
+                    choice = Integer.parseInt(choix);
+                } catch (NumberFormatException e) {
+                    System.out.println("Veuillez entrer un numero valide !!!");
+                    choice = 0;
+                }
+            }
+        } while (choice == 0);
+
+        Account c = null;
+        for (Account a : accounts) {
+            if (a.getNumeroCompte() == choice) {
+                c = a;
+            }
+        }
+
+        float montant;
+        if (c == null) {
+            System.out.printf("Le compte avec le numero %d n'existe pas !!\n", choice);
+        } else {
+            do {
+                System.out.print("Entrez le montant que vous souhaitez retirer : ");
+                String montantEntrer = input.nextLine();
+
+                if (montantEntrer.isEmpty()) {
+                    System.out.println("Veuillez entrer un montant valide !!!");
+                    montant = 0;
+                } else {
+                    try {
+                        montant = Float.parseFloat(montantEntrer);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Veuillez entrer un montant valide !!!");
+                        montant = 0;
+                    }
+
+                    if (montant <= 0) {
+                        System.out.println("Veuillez entrer un montant valide !!!");
+                        montant = 0;
+                    } else if (montant > c.getSolde()) {
+                        System.out.println("Solde insuffisant !!!");
+                        montant = 0;
+                    }
+                }
+            } while (montant == 0);
+
+            c.retirer(montant);
+            System.out.println("Le retrait a ete effectue avec succes.");
+        }
+    }
+    // consulter solde function
+    public void consulterSolde(){
+        System.out.println("_______________________________________________________________________\n___________________________ Consulter Solde ____________________________\n_______________________________________________________________________");
+
+        for (Account a : accounts) {
+            System.out.printf("Numero compte : %d | Proprietaire : %s %s\n", a.getNumeroCompte(), a.getClient().getNom(), a.getClient().getPrenom());
+        }
+
+        int choice;
+        do {
+            System.out.print("Entrez le numero du compte que vous souhaitez consulter : ");
+            String choix = input.nextLine();
+
+            if (choix.isEmpty()) {
+                System.out.println("Veuillez entrer un numero valide !!!");
+                choice = 0;
+            } else {
+                try {
+                    choice = Integer.parseInt(choix);
+                } catch (NumberFormatException e) {
+                    System.out.println("Veuillez entrer un numero valide !!!");
+                    choice = 0;
+                }
+            }
+        } while (choice == 0);
+
+        Account c = null;
+        for (Account a : accounts) {
+            if (a.getNumeroCompte() == choice) {
+                c = a;
+            }
+        }
+
+        if (c == null) {
+            System.out.printf("Le compte avec le numero %d n'existe pas !!\n", choice);
+        } else {
+            System.out.println("---------------------------------------------------------------");
+            System.out.printf("Solde du compte %d (%s %s) : %.2f\n", c.getNumeroCompte(), c.getClient().getNom(), c.getClient().getPrenom(),c.getSolde());
+            System.out.println("---------------------------------------------------------------");
+        }
+    }
+
+
+    // menu
+    public int menu() {
+        System.out.println("_______________________________________________________________________\n____________________________E-bank menu____________________________\n_______________________________________________________________________");
+        System.out.println("1 ==> Afficher les comptes\n2 ==> AFficher les clients\n3 ==> Ajouter un client\n4 ==> Créer un compte bancaire\n5 ==> Consulter le solde\n6 ==> Déposer de l’argent\n7 ==> Retirer de l’argent\n8 ==> Supprimer un compte\n9 ==> Supprimer un client\n10 ==> quitter l'app");
+        System.out.print("Veuillez entrer  votre choix : ");
+        String choix = input.nextLine();
+        int choice = 0 ;
+        if (choix.isEmpty()) {
+            System.out.println("Veuillez entrer  un choix !!!!");
+            return 0;
+        } else {
+            try {
+                choice = Integer.parseInt(choix);
+            } catch (NumberFormatException e) {
+                System.out.println("Veuillez entrer  un choix valide !!!!!!");
+                return 0;
+            }
+        }
+        return choice;
+    }
+    // export the data as exel
+    public void exportExel(){
+        
+    }
+
+    public void EbankApp(){
+        System.out.println("_______________________________________________________________________\n____________________________WELCOMME TO E-bank____________________________\n_______________________________________________________________________");
+        int choix = 0;
+        do {
+            choix = menu();
+            switch (choix){
+                case 1 : afficherComptes(); break;
+                case 2 : afficherClients();break;
+                case 3 : ajouterClient();break;
+                case 4 : creerCompte();break;
+                case 5 : consulterSolde();break;
+                case 6 : deposerfunc();break;
+                case 7 : retirerfunc();break;
+                case 8 : supprimerCompte();break;
+                case 9 : supprimerClient();break;
+                case 10 : System.out.println("____________________________E-bank____________________________");break;
+                default:
+                    System.out.println("Invalide choix !!!!!");break;
+            }
+
+        }while (choix != 10);
+    }
+
 }
 

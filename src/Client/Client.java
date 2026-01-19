@@ -1,5 +1,4 @@
 package Client;
-
 import Account.Account;
 import Person.Person;
 import java.util.ArrayList;
