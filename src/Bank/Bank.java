@@ -1,7 +1,9 @@
 package Bank;
 
 import java.util.*;
-
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.io.FileOutputStream;
 import Account.Account;
 import Client.Client;
 import Account.SavingAccount;
@@ -533,6 +535,10 @@ public class Bank {
     }
     // export the data as exel
     public void exportExel(){
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Comptes");
+        
+        
         
     }
 
@@ -558,6 +564,5 @@ public class Bank {
 
         }while (choix != 10);
     }
-
 }
 
