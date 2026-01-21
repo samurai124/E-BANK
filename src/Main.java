@@ -5,5 +5,4 @@ class Main{
         Bank b = new Bank();
         b.EbankApp();
     }
-
 }

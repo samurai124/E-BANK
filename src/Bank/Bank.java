@@ -4,13 +4,28 @@ import java.util.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 import Account.Account;
 import Client.Client;
 import Account.SavingAccount;
 
 public class Bank {
-    private ArrayList<Account> accounts = new ArrayList<>();
-    private ArrayList<Client> clients = new ArrayList<>();
+
+//    private ArrayList<Client> clients = new ArrayList<>();
+//    private ArrayList<Account> accounts = new ArrayList<>();
+    private ArrayList<Client> clients = new ArrayList<>(Arrays.asList(
+            new Client("zaidi","hamza",21,"mail",123),
+            new Client("ke","ven",23,"mail",133),
+            new Client("see","mantes",23,"mail",323)
+
+    ));
+    private ArrayList<Account> accounts = new ArrayList<>(Arrays.asList(
+            new Account(12344,1000,clients.get(0)),
+            new Account(1000,1000,clients.get(1)),
+            new Account(1111,1000,clients.get(2))
+
+    ));
     static Scanner input = new Scanner(System.in);
 
     // function pour affiche  les clients
@@ -129,7 +144,7 @@ public class Bank {
         Client client;
         String answer;
         System.out.println("_______________________________________________________________________\n_____________________________Creer compte_____________________________\n_______________________________________________________________________");
-
+        if (!accounts.isEmpty()) {
         do {
             System.out.print("est-ce un compte d’épargne ? (oui/non) : ");
             answer = input.nextLine();
@@ -175,6 +190,7 @@ public class Bank {
         } while (solde == -1);
 
         // client
+
         System.out.println("Veuillez choisir le numero Client :");
         for (int i = 0; i < clients.size(); i++) {
             System.out.printf("Numero client : %d ,Nom et prenom: %s %s \n", clients.get(i).getNumeroClient(), clients.get(i).getNom(), clients.get(i).getPrenom());
@@ -227,6 +243,39 @@ public class Bank {
 
         } else {
             Account a = new Account(numeroCompte, solde, c);
+            c.ajouterCompte(a);
+            accounts.add(a);
+            System.out.printf(
+                    "Compt ajouté avec succès. Numéro compt : %d%n",
+                    a.getNumeroCompte()
+            );
+        }}else{
+            Client c = null;
+            System.out.printf("Aucun client exist  !!!\n");
+            System.out.print("\nTu ajouter un cleint ? (oui/non) : ");
+            String ajouterClient = input.nextLine();
+            if (ajouterClient.equals("oui")) {
+                ajouterClient();
+                c = clients.get(clients.size() - 1);
+            } else {
+                return;
+            }
+            int numCompte;
+            if (accounts.isEmpty()) {
+                numCompte = r.nextInt(1000, 9999);
+            } else {
+                boolean isEqual = false;
+                do {
+                    numCompte = r.nextInt(1000, 9999);
+                    for (int i = 0; i < accounts.size(); i++) {
+                        if (accounts.get(i).getNumeroCompte() == numCompte) {
+                            isEqual = true;
+                            break;
+                        }
+                    }
+                } while (isEqual == true);
+            }
+            Account a = new Account(numCompte, solde, c);
             c.ajouterCompte(a);
             accounts.add(a);
             System.out.printf(
@@ -516,7 +565,7 @@ public class Bank {
     // menu
     public int menu() {
         System.out.println("_______________________________________________________________________\n____________________________E-bank menu____________________________\n_______________________________________________________________________");
-        System.out.println("1 ==> Afficher les comptes\n2 ==> AFficher les clients\n3 ==> Ajouter un client\n4 ==> Créer un compte bancaire\n5 ==> Consulter le solde\n6 ==> Déposer de l’argent\n7 ==> Retirer de l’argent\n8 ==> Supprimer un compte\n9 ==> Supprimer un client\n10 ==> quitter l'app");
+        System.out.println("1 ==> Afficher les comptes\n2 ==> AFficher les clients\n3 ==> Ajouter un client\n4 ==> Créer un compte bancaire\n5 ==> Consulter le solde\n6 ==> Déposer de l’argent\n7 ==> Retirer de l’argent\n8 ==> Supprimer un compte\n9 ==> Supprimer un client\n10 ==> Export les comptes sous form exel \n11 ==> quitter l'app");
         System.out.print("Veuillez entrer  votre choix : ");
         String choix = input.nextLine();
         int choice = 0 ;
@@ -534,12 +583,39 @@ public class Bank {
         return choice;
     }
     // export the data as exel
-    public void exportExel(){
+    public void exportExcel() {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Comptes");
-        
-        
-        
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("Numero Compte");
+        header.createCell(1).setCellValue("Nom");
+        header.createCell(2).setCellValue("Prenom");
+        header.createCell(3).setCellValue("Solde");
+
+        int rowNum = 1;
+
+        for (Account a : accounts) {
+            Row row = sheet.createRow(rowNum++);
+
+            row.createCell(0).setCellValue(a.getNumeroCompte());
+            row.createCell(1).setCellValue(a.getClient().getNom());
+            row.createCell(2).setCellValue(a.getClient().getPrenom());
+            row.createCell(3).setCellValue(a.getSolde());
+        }
+
+        try (FileOutputStream fos = new FileOutputStream("C:\\Users\\hamza2004\\Bureau\\comptes.xlsx")) {
+            workbook.write(fos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Export Excel terminé avec succès !");
     }
 
     public void EbankApp(){
@@ -557,12 +633,12 @@ public class Bank {
                 case 7 : retirerfunc();break;
                 case 8 : supprimerCompte();break;
                 case 9 : supprimerClient();break;
-                case 10 : System.out.println("____________________________E-bank____________________________");break;
-                default:
-                    System.out.println("Invalide choix !!!!!");break;
+                case 10 : exportExcel();break;
+                case 11 : System.out.println("____________________________E-bank____________________________");break;
+                default : System.out.println("Invalide choix !!!!!");break;
             }
 
-        }while (choix != 10);
+        }while (choix != 11);
     }
 }
 
